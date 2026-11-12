@@ -1,63 +1,59 @@
 # Riskle
 
-A playable, browser-local MVP for virtual puzzle wagers. No accounts, services, secrets, real money, deployments, or database setup are required.
+Riskle is an unofficial, extension-first Wordle companion using fictional coins. Wordle stays on its official NYT page. The extension observes visible evaluated tile states and shows Riskle in Chrome's side panel; the companion website provides account, league, history and wallet views.
 
-Create local players, form friend leagues, play an original five-letter mock puzzle, and wager on your own or an opted-in friend's progress. Multiple wagers, changing provisional odds, additional stakes, partial/full cash-outs, settlement, rankings, and an auditable wallet ledger work together. The app saves state in IndexedDB transactions, synchronizes tabs with BroadcastChannel, and migrates earlier localStorage demo saves.
+Phase 3 adds Supabase email accounts, persistent profiles/history, private league invitations, RLS-protected progress subscriptions, provisional live markets, immutable additional stakes, partial/full cash-outs and transactional backend settlement. The working local mock lab remains at `/demo` strictly for repeatable tests and uses separate browser-local identities and balances.
+
+**Hosted activation is not automatic.** The prepared migration must be reviewed and applied to the configured Supabase project before account wallets/leagues/history work. No remote database migration, push or deployment has been performed in Phase 3. See [Phase 3 setup](docs/PHASE3_SETUP.md).
 
 ## Run locally
 
-Use Node.js 22+ and the repository's pnpm version (12.18.0). Verification was performed with Node 24.20.0.
+Use Node.js 22+ and pnpm 12.18.0. Configure the two public Supabase values in ignored `apps/web/.env.local` (see `.env.example`). No secret or service-role key is needed or accepted by the extension.
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev
+pnpm build:extension
 ```
 
-Open <http://localhost:3000>. Starting from a clean checkout, `pnpm dev` builds the two shared packages first. After editing a shared package, restart `pnpm dev` to rebuild it.
+Open <http://localhost:3000> for the real account companion and <http://localhost:3000/demo> for the testing lab. In Chrome, enable Developer mode at `chrome://extensions`, load the `apps/extension` directory unpacked, and click Riskle to open its side panel. Connect the same Supabase project and sign in. The configured extension communicates directly with Supabase and does not depend on localhost.
 
-For the production build:
-
-```sh
-pnpm build
-pnpm --dir apps/web start --hostname 127.0.0.1 --port 3000
-```
-
-Use the same hostname consistently: `localhost` and `127.0.0.1` have separate browser saves. No `.env` file is needed. The original Supabase files are retained as unused scaffolding.
+The extension requests `storage` and `sidePanel`. It injects only on the official daily Wordle URL and loopback test pages; its runtime guards reject other paths/ports. Backend host access is optional and granted for the single configured project when you connect it. Tokens remain in trusted extension storage, never in the NYT DOM or messages from a website. The observer does not read guessed words, answers, publisher storage or internal game state.
 
 ## Checks
 
 ```sh
+pnpm test
 pnpm typecheck
 pnpm lint
-pnpm test
 pnpm format:check
 pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
-The application browser tests use installed Google Chrome. The unpacked-extension test uses Playwright Chromium in an isolated profile. Keep port 3100 free for `test:e2e`; it starts its own production server there. The extension test forwards its isolated browser’s port-3000 requests to that server. See [TESTING.md](TESTING.md) for exact walkthroughs, expected accounting, and verification results.
+`test:e2e` builds the production application and extension, then uses isolated browser storage and port 3100. App tests use installed Chrome; unpacked-extension tests use Playwright Chromium.
 
-## Local extension
+An explicit live-page verification command submits synthetic guesses in an isolated signed-out profile and records only puzzle identity, counts and status:
 
-In Chrome, open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select `apps/extension`. Open the demo on port 3000, then the extension popup. It shows the most recently observed active player's mock progress and bankroll, with a timestamp. It is read-only.
+```sh
+node scripts/verify-wordle-live.mjs
+```
 
-Only the `storage` API permission is requested. Content scripts match `http://localhost/*` and `http://127.0.0.1/*`; Chrome match patterns cannot specify a port, so the script additionally checks port 3000 and path `/` before reading anything. There is no all-site or NYT injection, no `tabs` permission, no guessed-word transmission, and no hidden-answer inspection. The popup can open the local dashboard using `chrome.tabs.create`, which does not require the broad `tabs` permission.
+Actual evidence and remaining verification gaps: [TESTING.md](TESTING.md), [live report](docs/verification/wordle-live.json).
 
-**Actual Wordle detection is not implemented or verified.** This repository uses its own mock game only.
+## Architecture
 
-## Project structure
+- `apps/extension/src`: visible-state Wordle observer, authenticated background synchronization and React side panel.
+- `apps/web`: account companion at `/`, separate mock test lab at `/demo`.
+- `apps/web/lib/platform-client.ts`: shared Supabase client/API boundary used by website and extension builds.
+- `supabase/migrations/002_authenticated_platform.sql`: authenticated tables, RLS, financial RPCs, game history and rankings. The original scaffold is quarantined if present, not used for real accounts.
+- `packages/game-engine` and `packages/shared`: retained deterministic local test engine and domain types.
+- `tests/backend`: actual PostgreSQL migration/accounting/RLS tests through PGlite, with a test-only Auth identity boundary.
 
-- `apps/web`: Next.js/React client application and transactional browser save layer.
-- `packages/shared`: shared domain types.
-- `packages/game-engine`: deterministic mock puzzle, odds, immutable entry terms, positions, ledger and rankings.
-- `apps/extension`: local-only Manifest V3 companion.
-- `tests`: extension boundary tests and production browser workflows.
-- `supabase`: original, inactive schema scaffolding; not a production backend.
+## Trust and limits
 
-## Boundaries
+Every real-game result is labeled browser-observed and provisional. This does not prove honest play or prevent a signed-in user fabricating observations. Stale progress suspends live wagering; unresolved event gaps void unresolved stake at cost. Odds use a transparent toy outcome model and are not calibrated probabilities. There is no real money, redemption, purchasing coins or prizes.
 
-All identities are local test players. Anyone with access to the browser can switch players, reveal the mock answer, or edit storage. The demo is not authenticated, cheat resistant, server authoritative, or multiplayer across devices. Friends explicitly opt into live sharing (the seeded mock friend Sarah starts opted in).
+Live loading, six submitted guesses, a losing completion and a completed return were verified against the current official page. Winning tiles are tested with synthetic fixtures; a live winning game is not yet verified. Actual email confirmation, recovery delivery, two hosted accounts, Realtime and separate-computer operation remain unverified until the migration is approved/applied and real accounts are exercised.
 
-One UTC-date puzzle is chosen when a save is first created and stays pinned to that date on refresh. There is no automatic day rollover, weekly reset, allowance, head-to-head/group market, invitation system, or production Wordle integration. Delete the `riskle-demo` IndexedDB database (and any legacy `riskle.demo.v1` localStorage entry) in browser developer tools to start a fresh demo with the current UTC-date puzzle. This erases that demo's history.
-
-Rules and limitations: [docs/GAME_RULES.md](docs/GAME_RULES.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/ROADMAP.md](docs/ROADMAP.md).
+Disputes can be reported, but a moderation/adjustment workflow remains incomplete. Profile pictures currently use HTTPS URLs rather than uploads. Weekly rankings cover seven puzzle dates, with no bankroll reset; historical periods can be selected. Browser-store packaging, production hardening and other game adapters remain future work. See [setup and policy](docs/PHASE3_SETUP.md).

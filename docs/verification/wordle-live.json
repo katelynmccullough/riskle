@@ -1,0 +1,85 @@
+{
+  "checkedAt": "2026-11-12T16:32:20.375Z",
+  "url": "https://www.nytimes.com/games/wordle/index.html",
+  "observations": [
+    {
+      "game": "wordle",
+      "guessesUsed": 0,
+      "hasStarted": false,
+      "observedAt": "2026-11-12T16:32:25.890Z",
+      "offsetMinutes": 300,
+      "puzzleDate": "2026-11-12",
+      "puzzleId": "wordle:1972",
+      "source": "extension_observed",
+      "status": "not_started"
+    },
+    {
+      "game": "wordle",
+      "guessesUsed": 1,
+      "hasStarted": true,
+      "observedAt": "2026-11-12T16:32:27.728Z",
+      "offsetMinutes": 300,
+      "puzzleDate": "2026-11-12",
+      "puzzleId": "wordle:1972",
+      "source": "extension_observed",
+      "status": "in_progress"
+    },
+    {
+      "game": "wordle",
+      "guessesUsed": 2,
+      "hasStarted": true,
+      "observedAt": "2026-11-12T16:32:29.678Z",
+      "offsetMinutes": 300,
+      "puzzleDate": "2026-11-12",
+      "puzzleId": "wordle:1972",
+      "source": "extension_observed",
+      "status": "in_progress"
+    },
+    {
+      "game": "wordle",
+      "guessesUsed": 3,
+      "hasStarted": true,
+      "observedAt": "2026-11-12T16:32:31.476Z",
+      "offsetMinutes": 300,
+      "puzzleDate": "2026-11-12",
+      "puzzleId": "wordle:1972",
+      "source": "extension_observed",
+      "status": "in_progress"
+    },
+    {
+      "game": "wordle",
+      "guessesUsed": 4,
+      "hasStarted": true,
+      "observedAt": "2026-11-12T16:32:33.344Z",
+      "offsetMinutes": 300,
+      "puzzleDate": "2026-11-12",
+      "puzzleId": "wordle:1972",
+      "source": "extension_observed",
+      "status": "in_progress"
+    },
+    {
+      "game": "wordle",
+      "guessesUsed": 5,
+      "hasStarted": true,
+      "observedAt": "2026-11-12T16:32:35.209Z",
+      "offsetMinutes": 300,
+      "puzzleDate": "2026-11-12",
+      "puzzleId": "wordle:1972",
+      "source": "extension_observed",
+      "status": "in_progress"
+    },
+    {
+      "game": "wordle",
+      "guessesUsed": 6,
+      "hasStarted": true,
+      "observedAt": "2026-11-12T16:32:37.077Z",
+      "offsetMinutes": 300,
+      "puzzleDate": "2026-11-12",
+      "puzzleId": "wordle:1972",
+      "source": "extension_observed",
+      "status": "lost"
+    }
+  ],
+  "returnedCompleted": true,
+  "error": null
+}

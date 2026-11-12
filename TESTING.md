@@ -1,4 +1,22 @@
-# Running and testing Riskle locally
+# Riskle verification and testing
+
+## Phase 3 — extension and persistent accounts
+
+Final local results: **63 unit/database tests and 8 browser tests passed**, plus TypeScript, lint, formatting and production/extension builds. The actual live page check passed through all six guesses, a loss and a completed return. [Detailed verified/unverified results](docs/verification/PHASE3_RESULTS.md).
+
+The real-account companion is now at `/`; the preserved mock lab moved to `/demo`. Its existing testing walkthrough below still applies at `/demo`, with separate browser-local state.
+
+Read [PHASE3_SETUP.md](docs/PHASE3_SETUP.md) before testing real accounts. Configure the public Supabase URL/publishable key and apply the reviewed `002_authenticated_platform.sql` migration only after approval. No privileged key is used. The migration is approved but has not been applied remotely because the Supabase administration app is not installed/connected here yet.
+
+The new observer was inspected and tested on the official NYT daily page. See [wordle-live.json](docs/verification/wordle-live.json): visible puzzle identity, all six submitted guesses, a losing result and a completed return passed. No guessed words or answer are included in that report. Winning-state fixtures pass, but a live win is not yet verified.
+
+Automated tests additionally execute the actual SQL migration in PGlite, checking wallet integrity, duplicate requests, immutable added stakes, partial/full cash-outs, exposure, stale quotes/events, market closure, head-to-head ties, privacy, direct-write rejection and historical records. The Auth identity boundary is simulated in these SQL tests. Browser signup/login/reset/logout tests use explicit HTTP fixtures, not real email delivery. Real Supabase email/auth, Realtime and separate-computer play remain pending hosted activation and account testing.
+
+Run `pnpm test`, `pnpm typecheck`, `pnpm lint`, `pnpm format:check`, and `pnpm test:e2e`. Build the unpacked extension with `pnpm build:extension`. The primary extension UI is now the Chrome side panel, not the legacy mock popup.
+
+The remainder of this document records the prior local-MVP test procedure/results. Its statements that Wordle/accounts are absent refer to that earlier version; current scope and limitations are documented above and in PHASE3_SETUP.md.
+
+## Prior local test lab walkthrough
 
 ## Prerequisites and installation
 

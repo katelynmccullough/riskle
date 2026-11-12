@@ -447,3 +447,71 @@ footer {
     transition: none !important;
   }
 }
+.account-shell > .panel {
+  margin-bottom: 24px;
+}
+.account-form {
+  display: grid;
+  gap: 16px;
+  max-width: 520px;
+  margin: 20px 0;
+}
+.auth-panel {
+  max-width: 580px;
+  margin: auto;
+}
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  margin: 20px 0;
+}
+.calendar-day {
+  background: #111512;
+  border: 1px solid #343735;
+  border-radius: 6px;
+  padding: 12px;
+  min-height: 80px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-wrap: anywhere;
+}
+.calendar-day.won {
+  border-color: #326540;
+  background: #192a1d;
+}
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.invite-code {
+  overflow-wrap: anywhere;
+}
+.extension-app {
+  padding: 16px;
+}
+.extension-app .social-grid,
+.extension-app .wallet-grid {
+  grid-template-columns: 1fr;
+}
+.extension-app .market-controls {
+  flex-wrap: wrap;
+}
+.extension-app .market-controls label {
+  flex-basis: 100%;
+}
+.extension-app .calendar {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 600px) {
+  .calendar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .calendar-day {
+    padding: 6px;
+  }
+}

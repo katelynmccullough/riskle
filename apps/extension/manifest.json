@@ -1,19 +1,34 @@
 {
   "manifest_version": 3,
-  "name": "Riskle Local Companion",
-  "version": "0.2.0",
-  "description": "Companion for the local Riskle mock puzzle. No Wordle detection.",
-  "permissions": ["storage"],
+  "name": "Riskle",
+  "version": "0.3.0",
+  "description": "Unofficial Wordle companion with authenticated virtual wagers and private friend leagues.",
+  "permissions": ["storage", "sidePanel"],
   "action": {
-    "default_title": "Riskle local demo",
-    "default_popup": "popup.html"
+    "default_title": "Open Riskle side panel"
   },
-  "background": { "service_worker": "background.js" },
+  "background": {
+    "service_worker": "dist/background.js"
+  },
   "content_scripts": [
     {
       "matches": ["http://localhost/*", "http://127.0.0.1/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.nytimes.com/games/wordle/index.html*"],
+      "js": ["dist/wordle-content.js"],
+      "run_at": "document_idle"
     }
-  ]
+  ],
+  "minimum_chrome_version": "114",
+  "optional_host_permissions": [
+    "https://*.supabase.co/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
+  "side_panel": {
+    "default_path": "panel.html"
+  }
 }

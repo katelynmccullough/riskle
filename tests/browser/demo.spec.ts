@@ -28,7 +28,7 @@ const save = (page: Page) =>
       }),
   );
 const ready = async (page: Page) => {
-  await page.goto("/");
+  await page.goto("/demo");
   await expect(page.getByLabel("Active player")).toBeVisible();
   await expect.poll(async () => (await save(page))?.version).toBe(1);
 };

@@ -1,10 +1,15 @@
 {
   "extends": "./tsconfig.base.json",
-  "compilerOptions": { "noEmit": true },
+  "compilerOptions": {
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
   "include": [
     "vitest.config.ts",
     "playwright.config.ts",
     "tests/**/*.ts",
-    "packages/game-engine/tests/**/*.ts"
+    "packages/game-engine/tests/**/*.ts",
+    "apps/extension/src/**/*.ts",
+    "apps/extension/src/**/*.tsx"
   ]
 }

@@ -1,12 +1,11 @@
-# Remaining work beyond the local MVP
+# Remaining verification and product work
 
-- Head-to-head and group-winner markets, including ties and unfinished-player rules.
-- Automatic daily rollover and archived puzzles; weekly seasons/resets and allowances.
-- Invitations, account authentication, league roles and management permissions.
-- A real transactional backend, authenticated server-derived settlement and multiplayer synchronization across devices.
-- Database migrations for the eventual authoritative engine; review the inactive original Supabase scaffolding before using it.
-- Calibrated odds based on a documented, validated model.
-- Real third-party integrations only after inspecting permitted visible signals and applicable terms. Actual Wordle detection is currently absent and unverified.
-- Broader browser and assistive-technology validation. Current browser automation covers Chrome and an isolated Chromium extension profile.
+- Connect Supabase and apply the already-approved authenticated migration; verify real Supabase signup/email confirmation, reset delivery, two hosted users, Realtime, cross-device leagues and wagering.
+- Verify a winning completion against the current live Wordle page; fixtures currently cover the winning-tile path. Loading, guess counts, a losing completion and completed return have live evidence.
+- Moderation and explicit post-settlement corrections for dispute reports; no automated loss-refund button is offered.
+- Calibrated odds and a validated model. Current odds are transparently provisional simulations.
+- Profile-picture uploads (HTTPS URL pictures currently work), pagination for full account wager/ledger views and hardened operational limits.
+- Future game adapters, group-winner markets, archived season UI, weekly bankroll-reset policy and allowances.
+- More browser/accessibility testing, publisher-terms review and Chrome Web Store preparation. No publication or deployment is authorized by the current code changes.
 
-These are not exposed as nonworking decorative controls in the local demo. No deployment or external-service setup is necessary to play the current MVP.
+The local mock lab remains isolated under `/demo` for repeatable testing.

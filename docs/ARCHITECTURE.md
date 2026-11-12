@@ -1,3 +1,17 @@
+# Architecture: account companion and test lab
+
+The extension-first account path uses a Supabase client shared by the website and the bundled extension. The browser sends observations and commands; authenticated PostgreSQL RPCs derive financial outcomes. See [PHASE3_SETUP.md](PHASE3_SETUP.md) for the schema, RLS, freshness model and deployment boundary. No service-role or secret credential is used by either client.
+
+The NYT observer reads only visible tile-state attributes. Metadata comes from the visible intro date/number or a previously observed same-day identity cache. It observes DOM rerenders with MutationObserver, ignores partial reveal animations, and emits a heartbeat while the page is visible. Unsupported signals fail closed.
+
+The extension service worker validates sender URL, frame and message shape. Its data/API session is isolated in extension storage restricted to trusted extension contexts. Optional network permission is requested only for the chosen Supabase origin. The React interface lives in Chrome’s side panel and cannot overlay Wordle’s game controls.
+
+`rk_` tables are separate from the insecure original scaffold. A single serialized PostgreSQL transaction covers each command, immutable entry terms, ledger movement, exposure, cash-outs and settlement. RLS scopes direct queries and Realtime subscriptions, and clients have no table-write grants. User/puzzle results have canonical uniqueness constraints. Request receipts deduplicate retries. New days create new sessions; historical calendar/statistics queries preserve earlier records.
+
+A same-day first observation of an already-played board is history-only, with live markets disabled. Twelve seconds without a fresh accepted observation suspends live wagering. An unresolvable sequence gap marks the session disputed and voids unresolved positions at original remaining cost. These are conservative coordination rules, not proof against a malicious browser. All observed results and odds remain provisional.
+
+The separate local test lab is retained at `/demo`. It does not synchronize with authenticated wallets or profiles. The implementation below describes only that test lab.
+
 # Riskle local architecture
 
 The existing pnpm workspace, Next.js 14/React 18 application, shared types package and TypeScript game-engine package are retained. No authentication, remote database, deployment service or API credentials are needed for this local MVP.

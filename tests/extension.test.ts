@@ -6,7 +6,7 @@ describe("local extension boundary", () => {
     const manifest = JSON.parse(
       readFileSync("apps/extension/manifest.json", "utf8"),
     );
-    expect(manifest.permissions).toEqual(["storage"]);
+    expect(manifest.permissions).toEqual(["storage", "sidePanel"]);
     expect(manifest.host_permissions).toBeUndefined();
     expect(manifest.content_scripts[0].matches).toEqual([
       "http://localhost/*",

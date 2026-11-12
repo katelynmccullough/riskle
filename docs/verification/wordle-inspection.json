@@ -1,0 +1,437 @@
+{
+  "url": "https://www.nytimes.com/games/wordle/index.html",
+  "status": 200,
+  "title": "Wordle — The New York Times",
+  "headings": ["Wordle"],
+  "buttons": [
+    "",
+    "",
+    "",
+    "",
+    "q",
+    "w",
+    "e",
+    "r",
+    "t",
+    "y",
+    "u",
+    "i",
+    "o",
+    "p",
+    "a",
+    "s",
+    "d",
+    "f",
+    "g",
+    "h",
+    "j",
+    "k",
+    "l",
+    "enter",
+    "z",
+    "x",
+    "c",
+    "v",
+    "b",
+    "n",
+    "m",
+    ""
+  ],
+  "intro": "Wordle\nGet 6 chances to guess a 5-letter word.\nGet 6 chances to guess a 5-letter word.\nLog in\nPlay\nNovember 11, 2026\n\nNo. 1971\n\nEdited by Tracy Bennett\n\nPlay with no pre-game ads\n\nAccess over 10,000 puzzles in our archives. Subscribe now.",
+  "visibleText": "Skip to content\nSkip Advertisement\nWordle\nSubscribe to Games\nQ\nW\nE\nR\nT\nY\nU\nI\nO\nP\nA\nS\nD\nF\nG\nH\nJ\nK\nL\nENTER\nZ\nX\nC\nV\nB\nN\nM\n© 2026 The New York Times Company\nNYTimes.com\nSitemap\nPrivacy Policy\nTerms of Service\nCookie Policy\nTerms of Sale\nYour Privacy Choices",
+  "signals": [
+    {
+      "tag": "DIV",
+      "class": "App-module_gameContainer__K_CBh",
+      "state": null,
+      "testId": "game-wrapper",
+      "role": null,
+      "parentClass": "_moment_mlx7l_10 _disableScroll_mlx7l_20"
+    },
+    {
+      "tag": "SECTION",
+      "class": "Toolbar-module_toolbar__DGjo1 Toolbar-module_wordle__CibUu",
+      "state": null,
+      "testId": "toolbar",
+      "role": null,
+      "parentClass": "Toolbar-module_header__UFVtL"
+    },
+    {
+      "tag": "BUTTON",
+      "class": "ToolbarItem-module_toolbar_item__xrBr_ ToolbarItem-module_hamburger__sMjhO ToolbarItem-module_toolbar_itemDesktop__jFTZJ",
+      "state": null,
+      "testId": "menu-button",
+      "role": null,
+      "parentClass": ""
+    },
+    {
+      "tag": "svg",
+      "class": {},
+      "state": null,
+      "testId": "icon-menu",
+      "role": null,
+      "parentClass": "Icon-module_iconWrapper__ZfKPm"
+    },
+    {
+      "tag": "SPAN",
+      "class": "Popover-module_popover__trigger__bbZnY",
+      "state": "closed",
+      "testId": null,
+      "role": null,
+      "parentClass": "AppHeader-module_toolbar__menu__MIxIr"
+    },
+    {
+      "tag": "svg",
+      "class": {},
+      "state": null,
+      "testId": "icon-forum",
+      "role": null,
+      "parentClass": "Icon-module_iconWrapper__ZfKPm"
+    },
+    {
+      "tag": "SPAN",
+      "class": "Popover-module_popover__trigger__bbZnY",
+      "state": "closed",
+      "testId": null,
+      "role": null,
+      "parentClass": "AppHeader-module_toolbar__menu__MIxIr"
+    },
+    {
+      "tag": "BUTTON",
+      "class": "ToolbarItem-module_toolbar_item__xrBr_ ToolbarItem-module_toolbar_itemDesktop__jFTZJ",
+      "state": null,
+      "testId": "stats-button",
+      "role": null,
+      "parentClass": "Popover-module_popover__trigger__bbZnY"
+    },
+    {
+      "tag": "svg",
+      "class": {},
+      "state": null,
+      "testId": "icon-stats",
+      "role": null,
+      "parentClass": "Icon-module_iconWrapper__ZfKPm"
+    },
+    {
+      "tag": "BUTTON",
+      "class": "ToolbarItem-module_toolbar_item__xrBr_ ToolbarItem-module_toolbar_itemDesktop__jFTZJ",
+      "state": null,
+      "testId": "help-button",
+      "role": null,
+      "parentClass": "Dropdown-module_dropdown__container__DbgwB"
+    },
+    {
+      "tag": "svg",
+      "class": {},
+      "state": null,
+      "testId": "icon-help",
+      "role": null,
+      "parentClass": "Icon-module_iconWrapper__ZfKPm"
+    },
+    {
+      "tag": "BUTTON",
+      "class": "ToolbarItem-module_toolbar_item__xrBr_ ToolbarItem-module_toolbar_itemDesktop__jFTZJ",
+      "state": null,
+      "testId": "settings-button",
+      "role": null,
+      "parentClass": "AppHeader-module_toolbar__menu__MIxIr"
+    },
+    {
+      "tag": "svg",
+      "class": {},
+      "state": null,
+      "testId": "icon-settings",
+      "role": null,
+      "parentClass": "Icon-module_iconWrapper__ZfKPm"
+    },
+    {
+      "tag": "SPAN",
+      "class": "Popover-module_popover__trigger__bbZnY",
+      "state": "closed",
+      "testId": null,
+      "role": null,
+      "parentClass": "AppHeader-module_toolbar__menu__MIxIr"
+    },
+    {
+      "tag": "DIV",
+      "class": "SubscribeCTA-module_omaToolbarSubscribeCta__IvVYG",
+      "state": null,
+      "testId": "oma-games-toolbar-subscribe-cta",
+      "role": null,
+      "parentClass": "Popover-module_popover__trigger__bbZnY"
+    },
+    {
+      "tag": "DIV",
+      "class": "css-8wtcr7",
+      "state": null,
+      "testId": "onsite-messaging-unit-GamesToolbarSubscribeCta",
+      "role": null,
+      "parentClass": "SubscribeCTA-module_omaToolbarSubscribeCta__IvVYG"
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Tile-module_tile__UWEHN",
+      "state": "empty",
+      "testId": "tile",
+      "role": "img",
+      "parentClass": ""
+    },
+    {
+      "tag": "DIV",
+      "class": "Key-module_half__HooWu",
+      "state": null,
+      "testId": "spacer",
+      "role": null,
+      "parentClass": "Keyboard-module_row__ilOKU"
+    },
+    {
+      "tag": "DIV",
+      "class": "Key-module_half__HooWu",
+      "state": null,
+      "testId": "spacer",
+      "role": null,
+      "parentClass": "Keyboard-module_row__ilOKU"
+    },
+    {
+      "tag": "svg",
+      "class": {},
+      "state": null,
+      "testId": "icon-backspace",
+      "role": null,
+      "parentClass": "Key-module_key__kchQI Key-module_oneAndAHalf__bq8Tw"
+    }
+  ],
+  "inspectedAt": "2026-11-12T01:33:25.323Z"
+}

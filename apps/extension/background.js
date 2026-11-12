@@ -7,10 +7,11 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     respond({ ok: false });
     return false;
   }
+  if (message?.type !== "MOCK_STATE_UPDATE") return false;
   const p = message?.payload;
   const valid =
     ["http://localhost:3000", "http://127.0.0.1:3000"].includes(url.origin) &&
-    url.pathname === "/" &&
+    ["/", "/demo"].includes(url.pathname) &&
     message?.type === "MOCK_STATE_UPDATE" &&
     p?.game === "riskle-mock" &&
     p.source === "mock" &&
