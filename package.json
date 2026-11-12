@@ -1,0 +1,24 @@
+{
+  "name": "riskle",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@12.18.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "pnpm --dir apps/web dev",
+    "build": "pnpm --dir packages/shared build && pnpm --dir packages/game-engine build && pnpm --dir apps/web build",
+    "test": "pnpm --dir packages/shared build && pnpm --dir packages/game-engine build && vitest run --config vitest.config.ts",
+    "lint": "eslint . --ext .ts,.tsx"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "@types/node": "^22.15.30",
+    "eslint": "^9.16.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^3.2.4"
+  }
+}

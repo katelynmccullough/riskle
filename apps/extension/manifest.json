@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Riskle Companion",
+  "version": "0.1.0",
+  "description": "Unofficial live-risk companion for day puzzle games.",
+  "permissions": ["storage", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_title": "Riskle",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
