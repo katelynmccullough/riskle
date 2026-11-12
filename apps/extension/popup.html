@@ -1,26 +1,28 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Riskle</title>
+    <title>Riskle local companion</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
     <main class="popup">
       <h1>Riskle</h1>
-      <p class="tag">Virtual wagering</p>
+      <p class="tag">Local mock companion</p>
+      <p id="connection">Open the local demo to connect.</p>
       <div class="stats">
+        <div><span>Available coins</span><strong id="bankroll">—</strong></div>
         <div>
-          <span>Bankroll</span>
-          <strong>1000</strong>
-        </div>
-        <div>
-          <span>Live status</span>
-          <strong>Ready</strong>
+          <span>Latest observed progress</span><strong id="progress">—</strong>
         </div>
       </div>
-      <button>Open dashboard</button>
+      <p id="observed"></p>
+      <p>
+        Read-only snapshot. Actual Wordle detection is not implemented or
+        verified.
+      </p>
+      <button id="open">Open local dashboard</button>
     </main>
     <script src="popup.js"></script>
   </body>

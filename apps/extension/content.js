@@ -1,23 +1,31 @@
-const detectWordleState = () => {
-  const heading = document.querySelector('h1, h2, .title');
-  const text = heading ? heading.textContent || '' : '';
-  const guessCount = document.querySelectorAll('.row').length || 0;
-  const status = text.toLowerCase().includes('play') ? 'in_progress' : 'not_started';
-
-  return {
-    game: 'wordle',
-    status,
-    guessesUsed: guessCount,
-    maxGuesses: 6,
-    source: 'browser',
-    isLive: Boolean(guessCount || text),
+// Chrome match patterns cannot restrict ports. Publish only the demo on port 3000.
+if (
+  ["http://localhost:3000", "http://127.0.0.1:3000"].includes(
+    location.origin,
+  ) &&
+  location.pathname === "/"
+) {
+  let previous = "";
+  const publish = () => {
+    const raw = document
+      .getElementById("riskle-extension-state")
+      ?.getAttribute("data-state");
+    if (!raw || raw === previous) return;
+    try {
+      const payload = JSON.parse(raw);
+      chrome.runtime.sendMessage({ type: "MOCK_STATE_UPDATE", payload }, () => {
+        void chrome.runtime.lastError;
+      });
+      previous = raw;
+    } catch {
+      /* A partial or malformed DOM update is ignored. */
+    }
   };
-};
-
-const publish = () => {
-  const state = detectWordleState();
-  chrome.runtime.sendMessage({ type: 'GAME_STATE_UPDATE', payload: state });
-};
-
-publish();
-setInterval(publish, 15000);
+  publish();
+  new MutationObserver(publish).observe(document.documentElement, {
+    subtree: true,
+    childList: true,
+    attributes: true,
+    attributeFilter: ["data-state"],
+  });
+}

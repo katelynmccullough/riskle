@@ -1,15 +1,11 @@
 export type MarketType =
-  | 'self-performance'
-  | 'friend-performance'
-  | 'head-to-head'
-  | 'exact-outcome'
-  | 'threshold'
-  | 'group-prediction';
-
-export type GameStatus = 'not_started' | 'in_progress' | 'completed' | 'lost';
-export type WagerStatus = 'open' | 'settled' | 'cashout' | 'cancelled';
-export type QuoteStatus = 'active' | 'expired' | 'closed';
-
+  | "self-performance"
+  | "friend-performance"
+  | "head-to-head"
+  | "exact-outcome"
+  | "threshold"
+  | "group-prediction";
+export type GameStatus = "not_started" | "in_progress" | "completed" | "lost";
 export interface UserProfile {
   id: string;
   username: string;
@@ -18,12 +14,8 @@ export interface UserProfile {
   bankroll: number;
   exposure: number;
   joinDate: string;
-  privacy: {
-    shareProgress: boolean;
-    shareStats: boolean;
-  };
+  privacy: { shareProgress: boolean; shareStats: boolean };
 }
-
 export interface PlayerProgress {
   playerId: string;
   puzzleId: string;
@@ -31,25 +23,10 @@ export interface PlayerProgress {
   guessesUsed: number;
   maxGuesses: number;
   isLive: boolean;
-  source: 'mock' | 'browser' | 'manual';
+  source: "mock" | "browser" | "manual";
   finalGuesses?: number;
   lastUpdated: number;
 }
-
-export interface PredictionMarket {
-  id: string;
-  title: string;
-  subjectId: string;
-  subjectLabel: string;
-  marketType: MarketType;
-  prediction: string;
-  outcome?: string;
-  status: 'active' | 'closed' | 'suspended';
-  currentQuote: MarketQuote;
-  createdAt: number;
-  expiresAt: number;
-}
-
 export interface MarketQuote {
   id: string;
   marketId: string;
@@ -57,47 +34,67 @@ export interface MarketQuote {
   multiplier: number;
   quoteTs: number;
   expiryTs: number;
-  status: QuoteStatus;
+  status: "active" | "expired" | "closed";
   notes: string;
 }
-
-export interface WagerPosition {
+export interface PredictionMarket {
   id: string;
-  userId: string;
-  marketId: string;
+  title: string;
   subjectId: string;
   subjectLabel: string;
-  predictionType: MarketType;
+  puzzleId: string;
+  marketType: MarketType;
   prediction: string;
-  stake: number;
-  odds: number;
-  expectedPayout: number;
+  rule: { kind: "solve" | "threshold" | "exact"; guesses?: number };
+  outcome?: string;
+  status: "active" | "closed" | "suspended";
+  currentQuote: MarketQuote;
   createdAt: number;
-  status: WagerStatus;
-  marketVersion: number;
-  quoteId: string;
-  isImmutable: true;
+  expiresAt: number;
 }
-
+export interface WagerPosition {
+  readonly id: string;
+  readonly userId: string;
+  readonly marketId: string;
+  readonly subjectId: string;
+  readonly subjectLabel: string;
+  readonly puzzleId: string;
+  readonly predictionType: MarketType;
+  readonly prediction: string;
+  readonly stake: number;
+  readonly odds: number;
+  readonly expectedPayout: number;
+  readonly createdAt: number;
+  status: "open" | "settled" | "cashout";
+  remainingStake: number;
+  remainingPayout: number;
+  payout: number;
+  result?: "won" | "lost" | "cashed-out";
+  readonly marketVersion: number;
+  readonly quoteId: string;
+  readonly isImmutable: true;
+}
 export interface CashoutQuote {
   id: string;
   wagerId: string;
   marketId: string;
   quote: number;
+  stake: number;
+  remainingStake: number;
+  marketVersion: number;
   quoteTs: number;
   expiryTs: number;
   isValid: boolean;
 }
-
 export interface WalletEvent {
   id: string;
   userId: string;
   amount: number;
-  type: 'credit' | 'debit' | 'wager' | 'market_settlement' | 'cashout';
+  type: "credit" | "wager" | "market_settlement" | "cashout";
   reason: string;
   createdAt: number;
+  wagerId?: string;
 }
-
 export interface LeaderboardEntry {
   userId: string;
   username: string;
@@ -109,18 +106,17 @@ export interface LeaderboardEntry {
   topWin: number;
   bestFriendPrediction: number;
 }
-
 export interface League {
   id: string;
   name: string;
   members: string[];
   createdAt: number;
 }
-
-export function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
+export interface MockSession {
+  playerId: string;
+  puzzleId: string;
+  guesses: string[];
 }
-
 export function formatCoins(value: number) {
-  return `${Math.round(value)} coins`;
+  return `${value.toLocaleString()} coins`;
 }

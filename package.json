@@ -8,15 +8,20 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "pnpm --dir apps/web dev",
+    "dev": "pnpm --dir packages/shared build && pnpm --dir packages/game-engine build && pnpm --dir apps/web dev",
     "build": "pnpm --dir packages/shared build && pnpm --dir packages/game-engine build && pnpm --dir apps/web build",
     "test": "pnpm --dir packages/shared build && pnpm --dir packages/game-engine build && vitest run --config vitest.config.ts",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "typecheck": "pnpm --dir packages/shared build && pnpm --dir packages/game-engine build && tsc --noEmit -p apps/web/tsconfig.json && tsc --noEmit -p packages/game-engine/tsconfig.json && tsc -p tsconfig.tests.json",
+    "test:e2e": "pnpm build && playwright test",
+    "format:check": "prettier --check apps/web/app apps/web/lib apps/web/components packages/*/src packages/game-engine/tests tests eslint.config.mjs playwright.config.ts apps/extension apps/web/next.config.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",
+    "@playwright/test": "^1.65.0",
     "@types/node": "^22.15.30",
     "eslint": "^9.16.0",
+    "prettier": "^3.9.10",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.0.0",
     "vitest": "^3.2.4"
