@@ -124,11 +124,12 @@ test("account UI uses Supabase signup/login/reset and persists/logout sessions (
   await expect(
     page.getByRole("heading", { name: "Alice", exact: true }),
   ).toBeVisible();
-  await expect(page.locator(".stat").first()).toContainText("1000");
+  await expect(page.getByLabel("Your coins")).toContainText("1,000");
   await page.reload();
   await expect(
     page.getByRole("heading", { name: "Alice", exact: true }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Account menu", exact: true }).click();
   await page.getByRole("button", { name: "Log out", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Welcome back" }),

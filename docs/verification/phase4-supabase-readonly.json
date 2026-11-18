@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-11-13T15:49:54.910Z",
+  "checks": [
+    {
+      "name": "auth_settings",
+      "status": 200
+    },
+    {
+      "name": "riskle_state_anonymous",
+      "status": 401,
+      "code": "42501"
+    }
+  ]
+}

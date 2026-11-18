@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { createRoot } from "react-dom/client";
+import { Wordmark, Icon } from "../../web/components/riskle/primitives";
 import { AccountApp } from "../../web/components/account-app";
 import {
   platformClient,
@@ -81,8 +82,12 @@ function Panel() {
         !(await chrome.permissions.request({ origins: [permissionOrigin(c)] }))
       )
         throw new Error("Backend access was not granted.");
-      if (config?.url !== c.url)
+      const { platformConfig: previous } =
+        await chrome.storage.local.get("platformConfig");
+      if (previous && (previous as PlatformConfig).url !== c.url) {
+        await client?.auth.signOut({ scope: "local" });
         await chrome.storage.local.remove("riskle.auth");
+      }
       await chrome.storage.local.set({ platformConfig: c });
       setConfig(c);
     } catch (e) {
@@ -100,45 +105,84 @@ function Panel() {
         </p>
       )}
       {!config ? (
-        <main className="shell">
-          <h1>Connect Riskle</h1>
-          <p>
-            Use the same Supabase project as the companion website. Only its
-            public key is needed.
+        <main className="rk-connect">
+          <Wordmark />
+          <section className="rk-connect-card">
+            <span className="rk-connect-icon">
+              <Icon name="friends" size={38} />
+            </span>
+            <h1>Connect Riskle</h1>
+            <p>
+              Your Wordle, with company. Connect once to keep your account,
+              coins, and friendly rivalries together.
+            </p>
+            <form className="rk-form" onSubmit={(e) => void connect(e)}>
+              {__RISKLE_CONFIG__ ? (
+                <details className="rk-connection-details">
+                  <summary>Connection settings</summary>
+                  <label>
+                    Project URL
+                    <input
+                      type="url"
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      required
+                    />
+                  </label>
+                  <label>
+                    Publishable key
+                    <input
+                      value={key}
+                      onChange={(e) => setKey(e.target.value)}
+                      required
+                    />
+                  </label>
+                </details>
+              ) : (
+                <>
+                  <label>
+                    Project URL
+                    <input
+                      type="url"
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      required
+                    />
+                  </label>
+                  <label>
+                    Publishable key
+                    <input
+                      value={key}
+                      onChange={(e) => setKey(e.target.value)}
+                      required
+                    />
+                    <small>
+                      Use your project’s public key. Never a secret key.
+                    </small>
+                  </label>
+                </>
+              )}
+              <button className="rk-button rk-button-primary">
+                Continue to sign in <Icon name="arrow" size={17} />
+              </button>
+            </form>
+            <p className="rk-fineprint">
+              Chrome will ask to connect to your configured account service. No
+              browsing history or unrelated pages.
+            </p>
+          </section>
+          <p className="rk-fineprint">
+            Fictional coins. Real bragging rights.
+            <br />
+            An unofficial Wordle companion.
           </p>
-          <form className="account-form" onSubmit={(e) => void connect(e)}>
-            <label>
-              Project URL
-              <input
-                type="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                required
-              />
-            </label>
-            <label>
-              Publishable key
-              <input
-                value={key}
-                onChange={(e) => setKey(e.target.value)}
-                required
-              />
-            </label>
-            <button className="primary">Connect project</button>
-          </form>
         </main>
       ) : (
-        <>
-          <AccountApp client={client} extension />
-          <button
-            onClick={() => {
-              void client?.auth.signOut();
-              setConfig(null);
-            }}
-          >
-            Change project
-          </button>
-        </>
+        <AccountApp
+          client={client}
+          extension
+          onConnectionSettings={() => setConfig(null)}
+        />
       )}
     </>
   );

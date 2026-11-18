@@ -1,59 +1,39 @@
 # Riskle
 
-Riskle is an unofficial, extension-first Wordle companion using fictional coins. Wordle stays on its official NYT page. The extension observes visible evaluated tile states and shows Riskle in Chrome's side panel; the companion website provides account, league, history and wallet views.
+**A Chrome side panel and web dashboard for making Wordle predictions with friends.** Predict your result with fictional coins, follow your friends’ progress in a private league, and see how your picks played out over time.
 
-Phase 3 adds Supabase email accounts, persistent profiles/history, private league invitations, RLS-protected progress subscriptions, provisional live markets, immutable additional stakes, partial/full cash-outs and transactional backend settlement. The working local mock lab remains at `/demo` strictly for repeatable tests and uses separate browser-local identities and balances.
+[Run the demo](#run-locally) · [Architecture](docs/ARCHITECTURE.md) · [Test results](docs/verification/PHASE4_RESULTS.md)
 
-**Hosted activation is not automatic.** The prepared migration must be reviewed and applied to the configured Supabase project before account wallets/leagues/history work. No remote database migration, push or deployment has been performed in Phase 3. See [Phase 3 setup](docs/PHASE3_SETUP.md).
+The demo uses simulated puzzle progress and local balances. Riskle is an unofficial companion to the New York Times’ Wordle. Coins have no cash value, and the game offers no purchases, cash redemption, or prizes.
+
+## How it works
+
+1. **Observe.** A Manifest V3 content script reads visible tile evaluation states on the official Wordle page and derives progress and outcome. It leaves guesses and answers on the Wordle page.
+2. **Play.** The React side panel lets players review a server quote, commit fictional coins, and see confirmed results. The Next.js dashboard shows league standings, wallet activity, and history.
+3. **Settle.** Supabase Auth identifies players. PostgreSQL functions enforce quote validity and update positions and ledger entries transactionally. Row-level security limits access to private league data.
+
+| Layer | Implementation |
+| --- | --- |
+| Browser | [Chrome extension](apps/extension/src) with a page observer, background sync, and React side panel |
+| Web | [Next.js companion](apps/web) with account, league, and history views and a standalone demo |
+| Backend | [Supabase migration](supabase/migrations/002_authenticated_platform.sql) for Auth-linked data, access controls, and settlement |
+| Simulation | [TypeScript game engine](packages/game-engine) for deterministic local gameplay and tests |
+
+## Engineering decisions
+
+- **Provisional observations.** The browser reports visible progress, so the system treats results as provisional. Stale progress suspends markets, and unresolved observation gaps can cause outstanding positions to be voided. Odds come from a simple simulation model.
+- **Consistent balances.** Quotes can expire, added stakes create separate positions, and cash-outs use server quotes. The UI shows confirmed ledger events and uses IndexedDB to avoid repeating the same notification across refreshes and same-origin tabs.
+- **Layered tests.** Vitest covers game and UI logic. PGlite runs PostgreSQL migration, accounting, and access-control tests. Playwright covers the dashboard and bundled extension. The [verification report](docs/verification/PHASE4_RESULTS.md) records 81 unit and database tests, 13 browser tests, and the remaining hosted sign-up and settlement checks.
 
 ## Run locally
 
-Use Node.js 22+ and pnpm 12.18.0. Configure the two public Supabase values in ignored `apps/web/.env.local` (see `.env.example`). No secret or service-role key is needed or accepted by the extension.
+Use Node.js 22+ and pnpm 12.18.0.
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev
-pnpm build:extension
 ```
 
-Open <http://localhost:3000> for the real account companion and <http://localhost:3000/demo> for the testing lab. In Chrome, enable Developer mode at `chrome://extensions`, load the `apps/extension` directory unpacked, and click Riskle to open its side panel. Connect the same Supabase project and sign in. The configured extension communicates directly with Supabase and does not depend on localhost.
+Open [localhost:3000/demo](http://localhost:3000/demo) to try the simulation. For real accounts, configure the public Supabase values from [.env.example](.env.example) in `apps/web/.env.local` and follow the [backend setup](docs/PHASE3_SETUP.md).
 
-The extension requests `storage` and `sidePanel`. It injects only on the official daily Wordle URL and loopback test pages; its runtime guards reject other paths/ports. Backend host access is optional and granted for the single configured project when you connect it. Tokens remain in trusted extension storage, never in the NYT DOM or messages from a website. The observer does not read guessed words, answers, publisher storage or internal game state.
-
-## Checks
-
-```sh
-pnpm test
-pnpm typecheck
-pnpm lint
-pnpm format:check
-pnpm exec playwright install chromium
-pnpm test:e2e
-```
-
-`test:e2e` builds the production application and extension, then uses isolated browser storage and port 3100. App tests use installed Chrome; unpacked-extension tests use Playwright Chromium.
-
-An explicit live-page verification command submits synthetic guesses in an isolated signed-out profile and records only puzzle identity, counts and status:
-
-```sh
-node scripts/verify-wordle-live.mjs
-```
-
-Actual evidence and remaining verification gaps: [TESTING.md](TESTING.md), [live report](docs/verification/wordle-live.json).
-
-## Architecture
-
-- `apps/extension/src`: visible-state Wordle observer, authenticated background synchronization and React side panel.
-- `apps/web`: account companion at `/`, separate mock test lab at `/demo`.
-- `apps/web/lib/platform-client.ts`: shared Supabase client/API boundary used by website and extension builds.
-- `supabase/migrations/002_authenticated_platform.sql`: authenticated tables, RLS, financial RPCs, game history and rankings. The original scaffold is quarantined if present, not used for real accounts.
-- `packages/game-engine` and `packages/shared`: retained deterministic local test engine and domain types.
-- `tests/backend`: actual PostgreSQL migration/accounting/RLS tests through PGlite, with a test-only Auth identity boundary.
-
-## Trust and limits
-
-Every real-game result is labeled browser-observed and provisional. This does not prove honest play or prevent a signed-in user fabricating observations. Stale progress suspends live wagering; unresolved event gaps void unresolved stake at cost. Odds use a transparent toy outcome model and are not calibrated probabilities. There is no real money, redemption, purchasing coins or prizes.
-
-Live loading, six submitted guesses, a losing completion and a completed return were verified against the current official page. Winning tiles are tested with synthetic fixtures; a live winning game is not yet verified. Actual email confirmation, recovery delivery, two hosted accounts, Realtime and separate-computer operation remain unverified until the migration is approved/applied and real accounts are exercised.
-
-Disputes can be reported, but a moderation/adjustment workflow remains incomplete. Profile pictures currently use HTTPS URLs rather than uploads. Weekly rankings cover seven puzzle dates, with no bankroll reset; historical periods can be selected. Browser-store packaging, production hardening and other game adapters remain future work. See [setup and policy](docs/PHASE3_SETUP.md).
+Run `pnpm build:extension`, then load `apps/extension` unpacked at `chrome://extensions` with Developer mode enabled. Open the official Wordle page and click Riskle to open the side panel. See [TESTING.md](TESTING.md) for the full test commands and manual verification steps.

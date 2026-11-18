@@ -88,7 +88,7 @@ try {
   await rm(profile, { recursive: true, force: true });
 }
 await writeFile(
-  "docs/verification/wordle-live.json",
+  process.argv[2] ?? "docs/verification/wordle-live.json",
   JSON.stringify(report, null, 2),
 );
 console.log(JSON.stringify(report, null, 2));

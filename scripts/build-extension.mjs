@@ -48,11 +48,7 @@ let css = await readFile(
   "utf8",
 );
 css = css.replace(/^@tailwind.*;$/gm, "");
-await writeFile(
-  new URL("dist/panel.css", directory),
-  css +
-    "\n.extension-status{padding:12px;background:#24251a;border-bottom:1px solid #f4e65c;font-size:12px}.extension-app .brand{font-size:36px}",
-);
+await writeFile(new URL("dist/panel.css", directory), css);
 console.log(
   "Built local Manifest V3 extension. Only public configuration is included.",
 );

@@ -1,5 +1,45 @@
 # Riskle verification and testing
 
+## Phase 4 — extension-first game experience
+
+The current interface uses the shared light design, **Play / Friends / Bets / Profile** extension navigation and a separate account-focused web companion. The local mock puzzle remains at `/demo`. See [Phase 4 verification](docs/verification/PHASE4_RESULTS.md) for current results and limits; the Phase 3 and local-lab records below are historical.
+
+Run from the repository root:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm typecheck
+pnpm lint
+pnpm test
+pnpm format:check
+pnpm build
+pnpm build:extension
+pnpm test:e2e
+```
+
+`pnpm test:e2e` rebuilds both products and starts a separate production server on port 3100. Chrome and Playwright Chromium must be installed (`pnpm exec playwright install chromium`). Account UI tests use explicit Supabase HTTP fixtures; PostgreSQL tests execute the actual migration in PGlite with a simulated Auth identity. Neither is a hosted-account test.
+
+### Test the redesigned product manually
+
+1. Follow [Phase 3 setup](docs/PHASE3_SETUP.md) for public configuration and an activated backend. Start `pnpm dev`. Load/reload `apps/extension` unpacked in Chrome, connect the same project and sign in. Website and extension sign-ins are separate. Open Wordle on its official daily URL.
+2. In **Play**, verify today's game/count, available coins and realized daily profit. Choose **Me** or a progress-sharing league friend, choose a prediction, then **Choose stake**. Set a preset/custom whole-coin amount and **Review prediction**. Confirm payout equals stake × the quoted multiplier rounded down; profit equals payout minus stake, and maximum loss equals stake. Cancel must leave the wallet unchanged.
+3. Confirm once, then open **Bets**. Check locked terms and remaining stake. **Hold** displays the actual position without changing it. **Add stake** reviews a new position at fresh odds; verify the original stake/multiplier stay unchanged and available coins decrease only by the added amount.
+4. **Cash out** opens a sheet. Request a partial quote, check returned coins, realized gain/loss, remaining stake and expiry, then confirm. Repeat for the remainder. No coins return before confirmation; closed positions have no action controls. An expired/changed quote cannot confirm.
+5. Complete the observed game or advance a friend's shared game. A newly confirmed settlement shows a win/loss; reservation shows a separate confirmation, cash-outs are exits, and voids are neutral refunds. Refresh and reconnect: the same result must not celebrate again. A losing reserved stake must not debit the balance twice. Inspect **Bets** and **Coin trail** for persisted outcomes.
+6. In **Friends**, create a league, copy its real invitation, and join with a second account. Test progress-sharing off/on in **Profile → Settings**. Private progress must remain hidden and ineligible. Compare daily/weekly rankings with persisted results. No mock accounts or fictional activity are added to real leagues.
+7. After your own game completes, **Play** shows daily results. Pending wagers remain identified. Optional **Share your day → Download card** creates a PNG containing only result counts, profit and available rank. It must contain no guessed words or answer.
+8. On the website, test **Your corner**, **Your people**, **Your bets**, **Puzzle history**, **Coin trail**, **Settings** and **A little help** at desktop and mobile widths. Try the optional six-step tour and skip it. In the extension, resize to 320, 380 and 480px and enable the OS reduced-motion preference: controls remain usable and information remains visible without confetti or motion.
+
+The automated equivalents are `tests/browser/experience.spec.ts`, `tests/experience.test.ts` and `apps/web/components/riskle/experience.test.tsx`. Browser screenshots are in ignored `test-results/phase4-*.png`; they depict explicitly fictional test fixtures.
+
+To repeat the real-page observer check without overwriting Phase 3 evidence:
+
+```sh
+node scripts/verify-wordle-live.mjs docs/verification/phase4-wordle-live.json
+```
+
+This submits synthetic guesses in an isolated signed-out profile and deletes that profile afterward. It exports counts/status only. It does not test hosted settlement or guarantee a live win.
+
 ## Phase 3 — extension and persistent accounts
 
 Final local results: **63 unit/database tests and 8 browser tests passed**, plus TypeScript, lint, formatting and production/extension builds. The actual live page check passed through all six guesses, a loss and a completed return. [Detailed verified/unverified results](docs/verification/PHASE3_RESULTS.md).

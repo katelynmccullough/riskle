@@ -23,6 +23,8 @@ export type PlatformSession = {
   last_seen: string;
 };
 export type PlatformMarket = {
+  target: number;
+  version: number;
   id: string;
   session_id: string;
   opponent_id: string | null;
@@ -59,7 +61,13 @@ export type PlatformState = {
   leagues: { id: string; name: string; owner_id: string }[];
   members: { league_id: string; user_id: string }[];
   invites: { league_id: string; code: string; expires_at: string }[];
-  ledger: { id: number; amount: number; kind: string; created_at: string }[];
+  ledger: {
+    id: number;
+    amount: number;
+    kind: string;
+    created_at: string;
+    position_id?: string | null;
+  }[];
 };
 export type History = {
   days: (PlatformSession & { profit: number; daily_rank?: number | null })[];

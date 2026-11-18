@@ -1,45 +1,26 @@
-# Architecture: account companion and test lab
+# Riskle architecture
 
-The extension-first account path uses a Supabase client shared by the website and the bundled extension. The browser sends observations and commands; authenticated PostgreSQL RPCs derive financial outcomes. See [PHASE3_SETUP.md](PHASE3_SETUP.md) for the schema, RLS, freshness model and deployment boundary. No service-role or secret credential is used by either client.
+Riskle is a pnpm workspace with a Chrome extension, a Next.js dashboard, and a standalone browser simulation. The extension and dashboard use the same Supabase project and shared platform client.
 
-The NYT observer reads only visible tile-state attributes. Metadata comes from the visible intro date/number or a previously observed same-day identity cache. It observes DOM rerenders with MutationObserver, ignores partial reveal animations, and emits a heartbeat while the page is visible. Unsupported signals fail closed.
+## Live companion
 
-The extension service worker validates sender URL, frame and message shape. Its data/API session is isolated in extension storage restricted to trusted extension contexts. Optional network permission is requested only for the chosen Supabase origin. The React interface lives in Chrome’s side panel and cannot overlay Wordle’s game controls.
+| Boundary | Responsibility |
+| --- | --- |
+| Wordle content script | Observes visible puzzle identity and evaluated tile states. Emits puzzle ID, guess count, and outcome without sending guesses or answers. |
+| Extension service worker | Validates the sender, frame, and message shape. Keeps the authenticated session in trusted extension storage and forwards accepted observations. |
+| React side panel and web dashboard | Display account state and submit commands for predictions, exits, and league participation. Render wallet changes from confirmed ledger entries. |
+| Supabase and PostgreSQL | Authenticate players, enforce row-level security, and process commands in transactions. Request receipts deduplicate retries, and private league subscriptions are scoped by membership. |
 
-`rk_` tables are separate from the insecure original scaffold. A single serialized PostgreSQL transaction covers each command, immutable entry terms, ledger movement, exposure, cash-outs and settlement. RLS scopes direct queries and Realtime subscriptions, and clients have no table-write grants. User/puzzle results have canonical uniqueness constraints. Request receipts deduplicate retries. New days create new sessions; historical calendar/statistics queries preserve earlier records.
+The observer uses a MutationObserver and a heartbeat while the puzzle page is visible. A first observation of an already played board is history-only. Stale progress suspends markets. An unresolved event gap can mark the session disputed and void unsettled positions at their remaining original cost. These rules keep the UI from presenting stale quotes and the backend from settling incomplete event sequences. Browser-reported outcomes remain provisional.
 
-A same-day first observation of an already-played board is history-only, with live markets disabled. Twelve seconds without a fresh accepted observation suspends live wagering. An unresolvable sequence gap marks the session disputed and voids unresolved positions at original remaining cost. These are conservative coordination rules, not proof against a malicious browser. All observed results and odds remain provisional.
+Original position terms stay fixed. Additional stake creates a separate position. Partial exits use a server quote and reduce the remaining exposure proportionally. Transactional ledger entries reconcile stakes, payouts, exits, and refunds. The interface uses IndexedDB acknowledgements so refreshes and same-origin tabs do not replay confirmed notifications.
 
-The separate local test lab is retained at `/demo`. It does not synchronize with authenticated wallets or profiles. The implementation below describes only that test lab.
+## Standalone demo
 
-# Riskle local architecture
+The `/demo` route uses the TypeScript game engine with fictional players and a mock puzzle. A single IndexedDB transaction restores the latest snapshot, executes each command, and saves the result. BroadcastChannel keeps other tabs up to date. The demo runs entirely in the browser with independent balances and history.
 
-The existing pnpm workspace, Next.js 14/React 18 application, shared types package and TypeScript game-engine package are retained. No authentication, remote database, deployment service or API credentials are needed for this local MVP.
+## Further reading
 
-## State and transactions
-
-`RiskleGameEngine` owns players, sessions, progress, markets, quotes, positions, wallet entries, league membership, activity and duplicate-request receipts. Methods execute synchronously. The engine derives market outcomes from validated progress; callers cannot pass a settlement outcome. Guess events must advance one step, with duplicate, older and terminal progress ignored.
-
-`apps/web/lib/demo-store.ts` is the browser transaction boundary. One IndexedDB read/write transaction serializes each mutation across tabs for the same origin. Each command restores the latest saved engine, applies the command and stores a versioned snapshot in that same transaction. Only a successful write updates the command's displayed state. A failed command or quota failure aborts the transaction, leaving the committed snapshot unchanged. BroadcastChannel messages and window-focus events update other tabs. Monotonic revisions prevent a delayed read from replacing a newer displayed state. No persisted asynchronous work or external side effects are part of these transactions.
-
-The snapshot preserves the ledger, immutable entry terms, remaining stake/liability, progress, guessed words for this original mock puzzle, quotes, memberships and idempotency receipts. Restore checks wallet/position accounting and rejects corrupt or incompatible saves without silently replacing them. This is validation for accidental corruption, not tamper resistance. Snapshots contain no credentials. Storage is per browser origin, not shared across devices or hostnames. IndexedDB must be available. Earlier localStorage snapshots are migrated during the first successful IndexedDB commit, then their legacy entry is removed. Browser localStorage is otherwise used only for the selected-player preference.
-
-Storage-level transactions are used so competing tabs cannot read the same pre-mutation snapshot and overwrite each other’s committed changes.
-
-## Accounting
-
-Original wager entry terms remain unchanged; lifecycle fields track remaining stake, remaining payout liability, total credits and outcome. Additional stake always enters as a distinct wager. Partial cash-out consumes only proportional liability and exposure. Payout calculations use integer division, with the final exit consuming any remaining rounding liability. The wallet ledger records every movement and zero-credit loss settlements.
-
-The engine has no production authorization boundary. Browser code and storage remain editable by the user. Local test-player switching intentionally provides access to every simulated identity. No server-authoritative security, production atomicity, authenticated leagues, fraud prevention or cheat-proof settlement is claimed.
-
-## UI and extension
-
-The dashboard is a React client. Dedicated puzzle and position components render guess feedback and position controls. The save layer and shared engine keep UI state separate from wagering rules. Form errors and confirmed command results are accessible live messages. Mobile tables scroll within their panels.
-
-The Manifest V3 extension reads a minimal hidden DOM snapshot from the local dashboard. Its content script checks port/path, observes changes, and sends only current player label, puzzle ID, public status/count and virtual wallet totals. The service worker validates sender origin/path and payload, strips extra fields, and stores a timestamped read-only snapshot. Popup rendering uses textContent. It never changes the app's balances or receives guessed words/answers.
-
-Only localhost/loopback content-script matches and the storage permission are used. No third-party content scripts, broad tabs access, credentials, cookies or browsing history are required. Wordle detection was removed because the previous row-count heuristic was unverified.
-
-## Retained scaffolding
-
-The existing `supabase` migration and seed are inactive historical scaffolding. They have not been validated as a functioning, secure production backend and do not mirror the new local snapshot model. No migration was applied or database provisioned. Shared legacy market-category names are retained for future use, while the engine only creates and settles supported solve, threshold and exact markets.
+- [Backend setup and schema](PHASE3_SETUP.md)
+- [Game rules](GAME_RULES.md)
+- [Verification results](verification/PHASE4_RESULTS.md)
